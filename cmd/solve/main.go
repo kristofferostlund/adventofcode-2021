@@ -1,19 +1,20 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"log"
 
 	"github.com/kristofferostlund/adventofcode-2021/internal/puzzle1"
+	"github.com/kristofferostlund/adventofcode-2021/internal/puzzle2"
 	"github.com/kristofferostlund/adventofcode-2021/pkg/adventofcode"
 )
 
 var (
 	puzzle  = flag.String("puzzle", "", "what day to solve? Example: 1")
 	puzzles = map[string]adventofcode.Puzzle{
-		"1": puzzle1.New(),
+		"1": *puzzle1.New(),
+		"2": *puzzle2.New(),
 	}
 )
 
@@ -22,13 +23,12 @@ func main() {
 
 	toSolve, ok := puzzles[*puzzle]
 	if !ok {
-		log.Fatalf("no such puzzle \"%s\"", *puzzle)
+		log.Fatalf("No such puzzle \"%s\"", *puzzle)
 	}
 
-	ctx := context.Background()
-	solution, err := toSolve.Solve(ctx)
+	solution, err := toSolve.Solve()
 	if err != nil {
-		log.Fatalf("solving puzzle %s: %s", *puzzle, err)
+		log.Fatalf("Solving puzzle %s: %s", *puzzle, err)
 	}
 
 	log.Printf("Attempted solving puzzle %s", *puzzle)
