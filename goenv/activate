@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+go build -o /dev/null goenv/verify-generics.go 2>/dev/null
+build_status=$?
+if [[ $build_status == 0 ]] ; then
+  echo "$(go version) already supports generics, exiting"
+  return 0
+fi
+
+prev_PS1=$PS1
+
+function deactivate() {
+  PS1=$prev_PS1
+  if [[ ! -z "$(alias go)" ]]; then
+    unalias go
+  fi
+  unset -f deactivate
+}
+
+if [[ -z "$(command -v go1.18beta1)" ]] ; then
+  echo "Installing go1.18beta1"
+  go install golang.org/dl/go1.18beta1@latest
+
+  echo "Downloading updates go1.18beta1"
+  go1.18beta1 download
+
+  echo "Verifying version of go1.18beta1"
+  go1.18beta1 version
+fi
+
+alias go=go1.18beta1
+
+echo "Aliased go=go1.18beta1, now using $(go version)"
+go_version=$(go version | cut -d" " -f3)
+PS1="($go_version) $PS1"
