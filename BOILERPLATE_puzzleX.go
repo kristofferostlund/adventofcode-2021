@@ -35,7 +35,7 @@ func solve() (answers [2]int, err error) {
 }
 
 func ParseInput(reader io.Reader) ([]any, error) {
-	return fileutil.MapLines(reader, func(line string) (any, error) {
+	return fileutil.MapNonEmptyLines(reader, func(line string) (any, error) {
 		return nil, nil
 	})
 }

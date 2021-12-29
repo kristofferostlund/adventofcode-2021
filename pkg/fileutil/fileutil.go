@@ -39,10 +39,14 @@ func ScanLines(reader io.Reader, onLine func(index int, line string) error) erro
 	return nil
 }
 
-func MapLines[V any](reader io.Reader, onLine func(line string) (V, error)) ([]V, error) {
+func MapNonEmptyLines[V any](reader io.Reader, onLine func(line string) (V, error)) ([]V, error) {
 	out := make([]V, 0)
 
 	if err := ScanLines(reader, func(_ int, line string) error {
+		if line == "" {
+			return nil
+		}
+
 		v, err := onLine(line)
 		if err != nil {
 			return err

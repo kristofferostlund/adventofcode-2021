@@ -50,7 +50,7 @@ func solve() (answers [2]int, err error) {
 }
 
 func ParseInput(reader io.Reader) ([]Step, error) {
-	return fileutil.MapLines(reader, func(line string) (Step, error) {
+	return fileutil.MapNonEmptyLines(reader, func(line string) (Step, error) {
 		dir, val, found := strings.Cut(line, " ")
 		if !found {
 			return Step{}, fmt.Errorf("could not cut line \"%s\" by \" \"", line)

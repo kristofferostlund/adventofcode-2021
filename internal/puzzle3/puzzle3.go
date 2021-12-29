@@ -43,7 +43,7 @@ func solve() (answers [2]int, err error) {
 }
 
 func ParseInput(reader io.Reader) ([][]int, error) {
-	return fileutil.MapLines(reader, func(line string) ([]int, error) {
+	return fileutil.MapNonEmptyLines(reader, func(line string) ([]int, error) {
 		arr := make([]int, len(line))
 		for i, v := range line {
 			if i >= len(arr) {

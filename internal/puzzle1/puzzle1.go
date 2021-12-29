@@ -24,7 +24,7 @@ func solve() ([2]int, error) {
 		return [2]int{}, fmt.Errorf("getting input: %w", err)
 	}
 	defer rc.Close()
-	input, err := fileutil.MapLines(rc, func(line string) (int, error) { return strconv.Atoi(line) })
+	input, err := fileutil.MapNonEmptyLines(rc, strconv.Atoi)
 	if err != nil {
 		return [2]int{}, fmt.Errorf("reading input: %w", err)
 	}

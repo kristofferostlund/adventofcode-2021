@@ -84,27 +84,16 @@ func (b *BingoBoard) HasBingo() bool {
 	return false
 }
 
-func findFirstWinningBoard(nums []int, boards []*BingoBoard) (int, *BingoBoard, bool) {
-	for _, num := range nums {
-		var found *BingoBoard
-		for _, board := range boards {
-			board.Check(num)
-			if board.HasBingo() {
-				if found == nil {
-					found = board
-				}
+func (b *BingoBoard) Score(num int) int {
+	sum := 0
+	for _, row := range b.rows {
+		for _, v := range row {
+			if !b.IsChecked(v) {
+				sum += v
 			}
 		}
-
-		if found != nil {
-			return num, found, true
-		}
 	}
-	return 0, nil, false
-}
-
-func Solve2(input []any) int {
-	return 0
+	return sum * num
 }
 
 func (b *BingoBoard) TerminalDebug() string {
