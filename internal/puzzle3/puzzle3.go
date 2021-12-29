@@ -36,7 +36,7 @@ func solve() (answers [2]int, err error) {
 	}
 	solution2, err := Solve2(input)
 	if err != nil {
-		return [2]int{}, fmt.Errorf("solving part 1: %w", err)
+		return [2]int{}, fmt.Errorf("solving part 2: %w", err)
 	}
 
 	return [2]int{solution1, solution2}, nil

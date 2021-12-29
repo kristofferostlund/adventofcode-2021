@@ -11,3 +11,15 @@ func SliceEquals[V comparable](a, b []V) bool {
 	}
 	return true
 }
+
+func MapsEquals[K, V comparable](a, b map[K]V) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for k, v := range a {
+		if v != b[k] {
+			return false
+		}
+	}
+	return true
+}

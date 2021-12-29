@@ -22,24 +22,35 @@ func FileFrom(relativePath string) (io.ReadCloser, error) {
 	return readCloser, nil
 }
 
-func MapLines[V any](reader io.Reader, onLine func(line string) (V, error)) ([]V, error) {
-	out := make([]V, 0)
-
+func ScanLines(reader io.Reader, onLine func(index int, line string) error) error {
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanLines)
 
+	i := 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		if line == "" {
-			continue
-		}
 
-		v, err := onLine(line)
-		if err != nil {
-			return nil, err
+		if err := onLine(i, line); err != nil {
+			return err
 		}
-		out = append(out, v)
+		i++
 	}
 
+	return nil
+}
+
+func MapLines[V any](reader io.Reader, onLine func(line string) (V, error)) ([]V, error) {
+	out := make([]V, 0)
+
+	if err := ScanLines(reader, func(_ int, line string) error {
+		v, err := onLine(line)
+		if err != nil {
+			return err
+		}
+		out = append(out, v)
+		return nil
+	}); err != nil {
+		return nil, err
+	}
 	return out, nil
 }
