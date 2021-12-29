@@ -8,26 +8,26 @@ import (
 )
 
 func TestParseInput(t *testing.T) {
-	input := strings.NewReader(`
+	reader := strings.NewReader(`
 forward 1
 up 2
-down 3`[1:])
+down 3`)
 	expected := []puzzle2.Step{
 		{Direction: puzzle2.DirectionForward, Value: 1},
 		{Direction: puzzle2.DirectionUp, Value: 2},
 		{Direction: puzzle2.DirectionDown, Value: 3},
 	}
 
-	output, err := puzzle2.ParseInput(input)
+	actual, err := puzzle2.ParseInput(reader)
 	if err != nil {
 		t.Fatalf("parsing input: %s", err)
 	}
 
-	if len(output) != len(expected) {
-		t.Fatalf("expected output length to be %d, got %d", len(expected), len(output))
+	if len(actual) != len(expected) {
+		t.Fatalf("expected output length to be %d, got %d", len(expected), len(actual))
 	}
 
-	for i, s := range output {
+	for i, s := range actual {
 		if s.Direction != expected[i].Direction || s.Value != expected[i].Value {
 			t.Errorf("expected step at %d to be %+v, got %+v", i, expected[i], s)
 		}
@@ -41,15 +41,15 @@ down 5
 forward 8
 up 3
 down 8
-forward 2`[1:]))
+forward 2`))
 	if err != nil {
 		t.Fatalf("parsing input: %s", err)
 	}
 
 	expected := 150
-	output := puzzle2.Solve1(input)
-	if expected != output {
-		t.Errorf("expected %d, got %d", expected, output)
+	actual := puzzle2.Solve1(input)
+	if expected != actual {
+		t.Errorf("expected %d, got %d", expected, actual)
 	}
 }
 
@@ -60,14 +60,14 @@ down 5
 forward 8
 up 3
 down 8
-forward 2`[1:]))
+forward 2`))
 	if err != nil {
 		t.Fatalf("parsing input: %s", err)
 	}
 
 	expected := 900
-	output := puzzle2.Solve2(input)
-	if expected != output {
-		t.Errorf("expected %d, got %d", expected, output)
+	actual := puzzle2.Solve2(input)
+	if expected != actual {
+		t.Errorf("expected %d, got %d", expected, actual)
 	}
 }

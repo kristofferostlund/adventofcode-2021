@@ -7,6 +7,7 @@ import (
 
 	"github.com/kristofferostlund/adventofcode-2021/internal/puzzle1"
 	"github.com/kristofferostlund/adventofcode-2021/internal/puzzle2"
+	"github.com/kristofferostlund/adventofcode-2021/internal/puzzle3"
 	"github.com/kristofferostlund/adventofcode-2021/pkg/adventofcode"
 )
 
@@ -15,6 +16,7 @@ var (
 	puzzles = map[string]adventofcode.Puzzle{
 		"1": *puzzle1.New(),
 		"2": *puzzle2.New(),
+		"3": *puzzle3.New(),
 	}
 )
 
