@@ -27,7 +27,7 @@ func New() *adventofcode.Puzzle {
 	return adventofcode.NewPuzzle(
 		"puzzle 2",
 		"https://adventofcode.com/2021/day/2",
-		[2]int{1882980, -1},
+		[2]int{1882980, 1971232560},
 		solve,
 	)
 }
@@ -44,8 +44,9 @@ func solve() (answers [2]int, err error) {
 	}
 
 	solution1 := Solve1(input)
+	solution2 := Solve2(input)
 
-	return [2]int{solution1, 0}, nil
+	return [2]int{solution1, solution2}, nil
 }
 
 func ParseInput(reader io.Reader) ([]Step, error) {
@@ -72,6 +73,24 @@ func Solve1(input []Step) int {
 			y += s.Value
 		case DirectionUp:
 			y -= s.Value
+		default:
+			panic(fmt.Errorf("unsupported direction %s", s.Direction))
+		}
+	}
+	return x * y
+}
+
+func Solve2(input []Step) int {
+	x, y, aim := 0, 0, 0
+	for _, s := range input {
+		switch s.Direction {
+		case DirectionForward:
+			x += s.Value
+			y += aim * s.Value
+		case DirectionDown:
+			aim += s.Value
+		case DirectionUp:
+			aim -= s.Value
 		default:
 			panic(fmt.Errorf("unsupported direction %s", s.Direction))
 		}

@@ -52,3 +52,22 @@ forward 2`[1:]))
 		t.Errorf("expected %d, got %d", expected, output)
 	}
 }
+
+func TestSolve2_exampleInput(t *testing.T) {
+	input, err := puzzle2.ParseInput(strings.NewReader(`
+forward 5
+down 5
+forward 8
+up 3
+down 8
+forward 2`[1:]))
+	if err != nil {
+		t.Fatalf("parsing input: %s", err)
+	}
+
+	expected := 900
+	output := puzzle2.Solve2(input)
+	if expected != output {
+		t.Errorf("expected %d, got %d", expected, output)
+	}
+}
