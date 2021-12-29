@@ -80,3 +80,31 @@ func TestSolve1_exampleInput(t *testing.T) {
 		t.Errorf("expected %d, got %d", expected, actual)
 	}
 }
+
+func TestSolve2_exampleInput(t *testing.T) {
+	input, err := puzzle3.ParseInput(strings.NewReader(`
+00100
+11110
+10110
+10111
+10101
+01111
+00111
+11100
+10000
+11001
+00010
+01010`))
+	if err != nil {
+		t.Fatalf("parsing input: %s", err)
+	}
+
+	expected := 230
+	actual, err := puzzle3.Solve2(input)
+	if err != nil {
+		t.Fatalf("solving puzzle: %s", err)
+	}
+	if expected != actual {
+		t.Errorf("expected %d, got %d", expected, actual)
+	}
+}

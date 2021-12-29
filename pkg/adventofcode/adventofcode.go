@@ -31,13 +31,13 @@ type Puzzle struct {
 }
 
 func NewPuzzle(name, url string, expected [2]int, solvFunc SolveFunc) *Puzzle {
-	return &Puzzle{expected: expected, solveFunc: solvFunc}
+	return &Puzzle{name, url, expected, solvFunc}
 }
 
 func (p *Puzzle) Solve() (Solution, error) {
 	answers, err := p.solveFunc()
 	if err != nil {
-		return nil, fmt.Errorf("solving puzzle %s: %w", p.name, err)
+		return nil, fmt.Errorf("solving %s: %w", p.name, err)
 	}
 	return &solution{p.expected, answers}, nil
 }

@@ -7,13 +7,14 @@ import (
 
 	"github.com/kristofferostlund/adventofcode-2021/pkg/adventofcode"
 	"github.com/kristofferostlund/adventofcode-2021/pkg/fileutil"
+	"github.com/kristofferostlund/adventofcode-2021/pkg/stringutil"
 )
 
 func New() *adventofcode.Puzzle {
 	return adventofcode.NewPuzzle(
 		"puzzle 3",
 		"https://adventofcode.com/2021/day/3",
-		[2]int{4001724, -1},
+		[2]int{4001724, 587895},
 		solve,
 	)
 }
@@ -46,7 +47,7 @@ func ParseInput(reader io.Reader) ([][]int, error) {
 		arr := make([]int, len(line))
 		for i, v := range line {
 			if i >= len(arr) {
-				return []int{}, fmt.Errorf("unexpeted length %d of line \"%s\"", len(line), line)
+				return []int{}, fmt.Errorf("unexpected length %d of line \"%s\"", len(line), line)
 			}
 			val, err := strconv.Atoi(string(v))
 			if err != nil {
@@ -59,40 +60,96 @@ func ParseInput(reader io.Reader) ([][]int, error) {
 }
 
 func Solve1(input [][]int) (int, error) {
-	elemSize := len(input[0])
-	sums := make([]int, elemSize)
+	width := len(input[0])
+	sums := make([]int, width)
 	for _, row := range input {
 		for j, v := range row {
 			sums[j] += v
 		}
 	}
 
-	gammaRate, epsilonRate := make([]rune, elemSize), make([]rune, elemSize)
+	gammaRate, epsilonRate := make([]int, width), make([]int, width)
 	for i, v := range sums {
 		switch true {
 		case len(input)-v > v:
-			gammaRate[i] = '1'
-			epsilonRate[i] = '0'
+			gammaRate[i] = 1
+			epsilonRate[i] = 0
 		case len(input)-v < v:
-			gammaRate[i] = '0'
-			epsilonRate[i] = '1'
+			gammaRate[i] = 0
+			epsilonRate[i] = 1
 		default:
 			return 0, fmt.Errorf("unexpected equilibrium, %d == %d", len(input)-v, v)
 		}
 	}
 
-	g, err := strconv.ParseInt(string(gammaRate), 2, 0)
+	g, err := intSliceBinaryToDecimal(gammaRate)
 	if err != nil {
-		return 0, fmt.Errorf("parsing gamma rate \"%s\" as base 2: %w", string(gammaRate), err)
+		return 0, fmt.Errorf("parsing gamma rate %w", err)
 	}
-	e, err := strconv.ParseInt(string(epsilonRate), 2, 0)
+	e, err := intSliceBinaryToDecimal(epsilonRate)
 	if err != nil {
-		return 0, fmt.Errorf("parsing epsilon rate \"%s\" as base 2: %w", string(epsilonRate), err)
+		return 0, fmt.Errorf("parsing epsilon rate %w", err)
 	}
 
-	return int(g) * int(e), nil
+	return g * e, nil
 }
 
 func Solve2(input [][]int) (int, error) {
-	return 0, nil
+	width := len(input[0])
+
+	oxElems := input
+	for x := 0; x < width; x++ {
+		outcomes := make(map[int][][]int)
+		for _, v := range oxElems {
+			outcomes[v[x]] = append(outcomes[v[x]], v)
+		}
+		if len(outcomes[0]) > len(outcomes[1]) {
+			oxElems = outcomes[0]
+		} else {
+			oxElems = outcomes[1]
+		}
+	}
+
+	co2Elems := input
+	for x := 0; x < width; x++ {
+		if len(co2Elems) == 1 {
+			break
+		}
+		outcomes := make(map[int][][]int)
+		for _, v := range co2Elems {
+			outcomes[v[x]] = append(outcomes[v[x]], v)
+		}
+		if len(outcomes[0]) <= len(outcomes[1]) {
+			co2Elems = outcomes[0]
+		} else {
+			co2Elems = outcomes[1]
+		}
+	}
+
+	if len(oxElems) != 1 {
+		return 0, fmt.Errorf("unexpected number of oxygen generator readings %d, exepcted %d", len(oxElems), 1)
+	}
+	oxGenRating, err := intSliceBinaryToDecimal(oxElems[0])
+	if err != nil {
+		return 0, fmt.Errorf("parsing oxygen generator reading: %w", err)
+	}
+
+	if len(co2Elems) != 1 {
+		return 0, fmt.Errorf("unexpected number of CO2 generator readings %d, exepcted %d", len(co2Elems), 1)
+	}
+	co2GenRating, err := intSliceBinaryToDecimal(co2Elems[0])
+	if err != nil {
+		return 0, fmt.Errorf("parsing CO2 generator reading: %w", err)
+	}
+
+	return oxGenRating * co2GenRating, nil
+}
+
+func intSliceBinaryToDecimal(input []int) (int, error) {
+	binaryStr := stringutil.JoinAny(input, "%d", "")
+	g, err := strconv.ParseInt(binaryStr, 2, 0)
+	if err != nil {
+		return 0, fmt.Errorf("parsing binary string \"%s\": %w", binaryStr, err)
+	}
+	return int(g), nil
 }
