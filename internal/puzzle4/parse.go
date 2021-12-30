@@ -3,10 +3,10 @@ package puzzle4
 import (
 	"fmt"
 	"io"
-	"strconv"
 	"strings"
 
 	"github.com/kristofferostlund/adventofcode-2021/pkg/fileutil"
+	"github.com/kristofferostlund/adventofcode-2021/pkg/intutil"
 )
 
 func ParseInput(reader io.Reader) ([]int, [][][]int, error) {
@@ -16,7 +16,7 @@ func ParseInput(reader io.Reader) ([]int, [][][]int, error) {
 
 	ingestNumbers := func(line string) error {
 		var err error
-		numbers, err = parseNumbers(strings.Split(line, ","))
+		numbers, err = intutil.Atois(strings.Split(line, ","))
 		if err != nil {
 			return fmt.Errorf("parsing number line: %w", err)
 		}
@@ -24,7 +24,7 @@ func ParseInput(reader io.Reader) ([]int, [][][]int, error) {
 	}
 
 	ingestBoards := func(line string) error {
-		nums, err := parseNumbers(splitBoardLine(line))
+		nums, err := intutil.Atois(splitBoardLine(line))
 		if err != nil {
 			return fmt.Errorf("parsing board line: %w", err)
 		}
@@ -65,16 +65,4 @@ func splitBoardLine(line string) []string {
 		}
 	}
 	return out
-}
-
-func parseNumbers(in []string) ([]int, error) {
-	out := make([]int, 0)
-	for _, s := range in {
-		v, err := strconv.Atoi(s)
-		if err != nil {
-			return nil, fmt.Errorf("parsing \"%s\": %w", s, err)
-		}
-		out = append(out, v)
-	}
-	return out, nil
 }

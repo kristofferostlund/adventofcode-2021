@@ -96,7 +96,7 @@ func (b *BingoBoard) Score(num int) int {
 	return sum * num
 }
 
-func (b *BingoBoard) TerminalDebug() string {
+func (b *BingoBoard) String() string {
 	sb := strings.Builder{}
 	if b.HasBingo() {
 		sb.WriteString("*** BINGO ****\n")

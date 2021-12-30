@@ -28,8 +28,14 @@ func solve() (answers [2]int, err error) {
 		return [2]int{}, fmt.Errorf("reading input: %w", err)
 	}
 
-	solution1 := Solve1(input)
-	solution2 := Solve2(input)
+	solution1, err := Solve1(input)
+	if err != nil {
+		return [2]int{}, fmt.Errorf("solving part 1: %w", err)
+	}
+	solution2, err := Solve2(input)
+	if err != nil {
+		return [2]int{}, fmt.Errorf("solving part 2: %w", err)
+	}
 
 	return [2]int{solution1, solution2}, nil
 }
@@ -40,10 +46,10 @@ func ParseInput(reader io.Reader) ([]any, error) {
 	})
 }
 
-func Solve1(input []any) int {
-	return 0
+func Solve1(input []any) (int, error) {
+	return 0, nil
 }
 
-func Solve2(input []any) int {
-	return 0
+func Solve2(input []any) (int, error) {
+	return 0, nil
 }
