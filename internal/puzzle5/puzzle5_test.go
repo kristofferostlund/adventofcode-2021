@@ -50,6 +50,30 @@ func TestSolve1_exampleInput(t *testing.T) {
 	expected := 5
 	actual := puzzle5.Solve1(input)
 	if actual != expected {
-		t.Errorf("expeted %d, got %d", expected, actual)
+		t.Errorf("expected %d, got %d", expected, actual)
+	}
+}
+
+func TestSolve2_exampleInput(t *testing.T) {
+	input, err := puzzle5.ParseInput(strings.NewReader(`
+0,9 -> 5,9
+8,0 -> 0,8
+9,4 -> 3,4
+2,2 -> 2,1
+7,0 -> 7,4
+6,4 -> 2,0
+0,9 -> 2,9
+3,4 -> 1,4
+0,0 -> 8,8
+5,5 -> 8,2
+`))
+	if err != nil {
+		t.Fatalf("parsing input: %s", err)
+	}
+
+	expected := 12
+	actual := puzzle5.Solve2(input)
+	if actual != expected {
+		t.Errorf("expected %d, got %d", expected, actual)
 	}
 }

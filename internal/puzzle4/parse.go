@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/kristofferostlund/adventofcode-2021/pkg/fileutil"
-	"github.com/kristofferostlund/adventofcode-2021/pkg/intutil"
+	"github.com/kristofferostlund/adventofcode-2021/pkg/numutil"
 )
 
 func ParseInput(reader io.Reader) ([]int, [][][]int, error) {
@@ -16,7 +16,7 @@ func ParseInput(reader io.Reader) ([]int, [][][]int, error) {
 
 	ingestNumbers := func(line string) error {
 		var err error
-		numbers, err = intutil.Atois(strings.Split(line, ","))
+		numbers, err = numutil.Atois(strings.Split(line, ","))
 		if err != nil {
 			return fmt.Errorf("parsing number line: %w", err)
 		}
@@ -24,7 +24,7 @@ func ParseInput(reader io.Reader) ([]int, [][][]int, error) {
 	}
 
 	ingestBoards := func(line string) error {
-		nums, err := intutil.Atois(splitBoardLine(line))
+		nums, err := numutil.Atois(splitBoardLine(line))
 		if err != nil {
 			return fmt.Errorf("parsing board line: %w", err)
 		}

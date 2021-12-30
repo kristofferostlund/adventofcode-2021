@@ -6,7 +6,7 @@ import (
 
 	"github.com/kristofferostlund/adventofcode-2021/pkg/adventofcode"
 	"github.com/kristofferostlund/adventofcode-2021/pkg/fileutil"
-	"github.com/kristofferostlund/adventofcode-2021/pkg/intutil"
+	"github.com/kristofferostlund/adventofcode-2021/pkg/numutil"
 )
 
 func New() *adventofcode.Puzzle {
@@ -59,7 +59,7 @@ func solve2(input []int) int {
 		if len(windows[i]) != 3 || i == 0 {
 			continue
 		}
-		if intutil.SumInts(windows[i-1]) < intutil.SumInts(windows[i]) {
+		if numutil.SumInts(windows[i-1]) < numutil.SumInts(windows[i]) {
 			counter++
 		}
 	}

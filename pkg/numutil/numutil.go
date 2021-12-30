@@ -1,7 +1,8 @@
-package intutil
+package numutil
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 )
 
@@ -30,4 +31,17 @@ func FromTo(a, b int) (int, int) {
 		return a, b
 	}
 	return b, a
+}
+
+func Float64sMatch(a, b float64) bool {
+	return math.Abs(a-b) < 1e-6
+}
+
+func Float64In(ff []float64, f float64) bool {
+	for _, fl := range ff {
+		if Float64sMatch(fl, f) {
+			return true
+		}
+	}
+	return false
 }
