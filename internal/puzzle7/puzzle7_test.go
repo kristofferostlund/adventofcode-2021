@@ -1,6 +1,7 @@
 package puzzle7_test
 
 import (
+	"sort"
 	"strings"
 	"testing"
 
@@ -30,7 +31,7 @@ func TestSolve1_exampleInput(t *testing.T) {
 	}
 
 	expected := 37
-	actual := puzzle7.Solve1(input)
+	actual := puzzle7.Solve1(sortedAsc(input))
 	if actual != expected {
 		t.Errorf("expected %d, got %d", expected, actual)
 	}
@@ -43,8 +44,19 @@ func TestSolve2_exampleInput(t *testing.T) {
 	}
 
 	expected := 168
-	actual := puzzle7.Solve2(input)
+	actual := puzzle7.Solve2(sortedAsc(input))
 	if actual != expected {
 		t.Errorf("expected %d, got %d", expected, actual)
 	}
+}
+
+func sortedAsc(input []int) []int {
+	out := make([]int, len(input))
+	copy(out, input)
+
+	sort.Slice(out, func(i, j int) bool {
+		return out[i] < out[j]
+	})
+
+	return out
 }
