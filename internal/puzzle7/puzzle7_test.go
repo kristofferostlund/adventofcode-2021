@@ -35,3 +35,16 @@ func TestSolve1_exampleInput(t *testing.T) {
 		t.Errorf("expected %d, got %d", expected, actual)
 	}
 }
+
+func TestSolve2_exampleInput(t *testing.T) {
+	input, err := puzzle6.ParseInput(strings.NewReader(`16,1,2,0,4,2,7,1,2,14`))
+	if err != nil {
+		t.Fatalf("parsing input: %s", err)
+	}
+
+	expected := 168
+	actual := puzzle7.Solve2(input)
+	if actual != expected {
+		t.Errorf("expected %d, got %d", expected, actual)
+	}
+}

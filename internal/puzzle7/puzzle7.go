@@ -14,7 +14,7 @@ func New() *adventofcode.Puzzle {
 	return adventofcode.NewPuzzle(
 		"puzzle 7",
 		"https://adventofcode.com/2021/day/7",
-		[2]int{335330, -1},
+		[2]int{335330, 92439766},
 		solve,
 	)
 }
@@ -68,5 +68,36 @@ func Solve1(input []int) int {
 }
 
 func Solve2(input []int) int {
-	return 0
+	crabs := make([]int, len(input))
+	copy(crabs, input)
+	sort.Slice(crabs, func(i, j int) bool {
+		return crabs[i] < crabs[j]
+	})
+
+	poses := make(map[int]int)
+	for _, pos := range crabs {
+		poses[pos] = poses[pos] + 1
+	}
+
+	minPos, maxPos := crabs[0], crabs[len(crabs)-1]
+	bestPos := -1
+	for pos := minPos; pos <= maxPos; pos++ {
+		cost := 0
+		for p, multiplier := range poses {
+			cost += increasingStepCost(numutil.AbsInt(pos-p)) * multiplier
+		}
+		if cost < bestPos || bestPos == -1 {
+			bestPos = cost
+		}
+	}
+
+	return bestPos
+}
+
+func increasingStepCost(v int) int {
+	cost := 0
+	for i := 0; i < v; i++ {
+		cost += i + 1
+	}
+	return cost
 }
