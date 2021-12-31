@@ -7,6 +7,9 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
+
+	"github.com/kristofferostlund/adventofcode-2021/pkg/numutil"
 )
 
 func FileFrom(relativePath string) (io.ReadCloser, error) {
@@ -57,4 +60,17 @@ func MapNonEmptyLines[V any](reader io.Reader, onLine func(line string) (V, erro
 		return nil, err
 	}
 	return out, nil
+}
+
+func ParseSingleLineOfInts(reader io.Reader) ([]int, error) {
+	parsed, err := MapNonEmptyLines(reader, func(line string) ([]int, error) {
+		return numutil.Atois(strings.Split(line, ","))
+	})
+	if err != nil {
+		return nil, err
+	}
+	if len(parsed) != 1 {
+		return nil, fmt.Errorf("unexpected row count %d", len(parsed))
+	}
+	return parsed[0], nil
 }

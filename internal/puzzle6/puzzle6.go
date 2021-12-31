@@ -3,11 +3,9 @@ package puzzle6
 import (
 	"fmt"
 	"io"
-	"strings"
 
 	"github.com/kristofferostlund/adventofcode-2021/pkg/adventofcode"
 	"github.com/kristofferostlund/adventofcode-2021/pkg/fileutil"
-	"github.com/kristofferostlund/adventofcode-2021/pkg/numutil"
 )
 
 func New() *adventofcode.Puzzle {
@@ -37,16 +35,7 @@ func solve() (answers [2]int, err error) {
 }
 
 func ParseInput(reader io.Reader) ([]int, error) {
-	parsed, err := fileutil.MapNonEmptyLines(reader, func(line string) ([]int, error) {
-		return numutil.Atois(strings.Split(line, ","))
-	})
-	if err != nil {
-		return nil, err
-	}
-	if len(parsed) != 1 {
-		return nil, fmt.Errorf("unexpected row count %d", len(parsed))
-	}
-	return parsed[0], nil
+	return fileutil.ParseSingleLineOfInts(reader)
 }
 
 func Solve1(input []int) int {

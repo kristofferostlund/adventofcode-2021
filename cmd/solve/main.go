@@ -11,6 +11,7 @@ import (
 	"github.com/kristofferostlund/adventofcode-2021/internal/puzzle4"
 	"github.com/kristofferostlund/adventofcode-2021/internal/puzzle5"
 	"github.com/kristofferostlund/adventofcode-2021/internal/puzzle6"
+	"github.com/kristofferostlund/adventofcode-2021/internal/puzzle7"
 	"github.com/kristofferostlund/adventofcode-2021/pkg/adventofcode"
 )
 
@@ -23,6 +24,7 @@ var (
 		"4": *puzzle4.New(),
 		"5": *puzzle5.New(),
 		"6": *puzzle6.New(),
+		"7": *puzzle7.New(),
 	}
 )
 

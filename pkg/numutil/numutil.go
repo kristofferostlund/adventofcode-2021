@@ -33,6 +33,13 @@ func FromTo(a, b int) (int, int) {
 	return b, a
 }
 
+func AbsInt(v int) int {
+	if v < 0 {
+		return -v
+	}
+	return v
+}
+
 func Float64sMatch(a, b float64) bool {
 	return math.Abs(a-b) < 1e-6
 }
