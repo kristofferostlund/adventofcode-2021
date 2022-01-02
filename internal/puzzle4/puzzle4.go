@@ -6,6 +6,7 @@ import (
 
 	"github.com/kristofferostlund/adventofcode-2021/pkg/adventofcode"
 	"github.com/kristofferostlund/adventofcode-2021/pkg/fileutil"
+	"github.com/kristofferostlund/adventofcode-2021/pkg/sliceutil"
 )
 
 func New() *adventofcode.Puzzle {
@@ -99,9 +100,7 @@ func findLastWinningBoard(nums []int, boards []*BingoBoard) (int, *BingoBoard, b
 		}
 
 		for i, idx := range indexes {
-			copy(remainingBoards[idx-i:], remainingBoards[idx-i+1:])
-			remainingBoards[len(remainingBoards)-1] = nil
-			remainingBoards = remainingBoards[:len(remainingBoards)-1]
+			remainingBoards = sliceutil.RemoveAt(remainingBoards, idx-i)
 		}
 	}
 
