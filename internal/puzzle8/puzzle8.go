@@ -97,7 +97,7 @@ type sigMap struct {
 }
 
 func (s sigMap) add(sig string, num int) {
-	s.sigToNum[sorted(sig)] = num
+	s.sigToNum[s.key(sig)] = num
 	s.numToSig[num] = sig
 }
 
@@ -107,8 +107,14 @@ func (s sigMap) signalFor(num int) (string, bool) {
 }
 
 func (s sigMap) numFor(sig string) (int, bool) {
-	num, exists := s.sigToNum[sorted(sig)]
+	num, exists := s.sigToNum[s.key(sig)]
 	return num, exists
+}
+
+func (s sigMap) key(sig string) string {
+	r := []rune(sig)
+	sort.Slice(r, func(i, j int) bool { return r[i] < r[j] })
+	return string(r)
 }
 
 func interpretSignalPair(sp SignalPair) (int, error) {
@@ -158,41 +164,21 @@ func interpretSignalPair(sp SignalPair) (int, error) {
 	return parseValue(values, known)
 }
 
-func parseValue(values []string, known sigMap) (int, error) {
-	sb := strings.Builder{}
-	for _, v := range values {
-		val, found := known.numFor(v)
-		if !found {
-			return 0, fmt.Errorf("unknown value segment \"%s\"", sorted(v))
-		}
-		sb.WriteString(strconv.Itoa(val))
-	}
-
-	return strconv.Atoi(sb.String())
-}
-
 func get235(signals []string, one, four sets.Set[rune]) map[string]int {
 	out := make(map[string]int)
-	sigSets := make([]sets.Set[rune], 0)
-	var three sets.Set[rune]
 	for _, sig := range signals {
 		s := sets.FromRunes([]rune(sig))
-		if s.Contains(one) {
-			three = s
+		switch true {
+		case s.Contains(one):
 			out[sig] = 3
 			continue
-		}
-		sigSets = append(sigSets, s)
-	}
-
-	for _, s := range sigSets {
-		if len(s.Difference(three.Union(four))) == 0 {
-			out[string(s.Values())] = 5
-		} else {
-			out[string(s.Values())] = 2
+		case s.Union(one).Contains(four):
+			out[sig] = 5
+			continue
+		default:
+			out[sig] = 2
 		}
 	}
-
 	return out
 }
 
@@ -212,8 +198,14 @@ func get069(signals []string, one, four sets.Set[rune]) map[string]int {
 	return out
 }
 
-func sorted(s string) string {
-	r := []rune(s)
-	sort.Slice(r, func(i, j int) bool { return r[i] < r[j] })
-	return string(r)
+func parseValue(values []string, known sigMap) (int, error) {
+	sb := strings.Builder{}
+	for _, v := range values {
+		val, found := known.numFor(v)
+		if !found {
+			return 0, fmt.Errorf("unknown value segment \"%s\"", v)
+		}
+		sb.WriteString(strconv.Itoa(val))
+	}
+	return strconv.Atoi(sb.String())
 }
