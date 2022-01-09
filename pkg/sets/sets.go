@@ -15,6 +15,11 @@ func FromRunes(s []rune) Set[rune] {
 	return set
 }
 
+func (s Set[T]) Has(t T) bool {
+	_, exists := s[t]
+	return exists
+}
+
 func (s Set[T]) Add(v ...T) {
 	for _, k := range v {
 		s[k] = struct{}{}
@@ -60,7 +65,7 @@ func (s Set[T]) Equals(other Set[T]) bool {
 func (s Set[T]) Intersection(other Set[T]) Set[T] {
 	intersection := make(Set[T])
 	for k := range s {
-		if _, exists := other[k]; exists {
+		if other.Has(k) {
 			intersection[k] = struct{}{}
 		}
 	}
@@ -70,7 +75,7 @@ func (s Set[T]) Intersection(other Set[T]) Set[T] {
 func (s Set[T]) Difference(other Set[T]) Set[T] {
 	diff := make(Set[T])
 	for k := range s {
-		if _, exists := other[k]; !exists {
+		if !other.Has(k) {
 			diff[k] = struct{}{}
 		}
 	}

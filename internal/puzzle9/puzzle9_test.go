@@ -55,3 +55,21 @@ func TestSolve1_exampleInput(t *testing.T) {
 		t.Errorf("expected %d, got %d", expected, actual)
 	}
 }
+
+func TestSolve2_exampleInput(t *testing.T) {
+	input, err := puzzle9.ParseInput(strings.NewReader(`
+2199943210
+3987894921
+9856789892
+8767896789
+9899965678
+`))
+	if err != nil {
+		t.Fatalf("parsing input: %s", err)
+	}
+	expected := 1134
+	actual := puzzle9.Solve2(input)
+	if actual != expected {
+		t.Errorf("expected %d, got %d", expected, actual)
+	}
+}

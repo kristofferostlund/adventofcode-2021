@@ -3,18 +3,21 @@ package puzzle9
 import (
 	"fmt"
 	"io"
+	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/kristofferostlund/adventofcode-2021/pkg/adventofcode"
 	"github.com/kristofferostlund/adventofcode-2021/pkg/fileutil"
 	"github.com/kristofferostlund/adventofcode-2021/pkg/numutil"
+	"github.com/kristofferostlund/adventofcode-2021/pkg/stringutil"
 )
 
 func New() *adventofcode.Puzzle {
 	return adventofcode.NewPuzzle(
 		"puzzle 9",
 		"https://adventofcode.com/2021/day/9",
-		[2]int{-1, -1},
+		[2]int{532, 1110780},
 		solve,
 	)
 }
@@ -114,5 +117,96 @@ func Solve1(grid Grid) int {
 }
 
 func Solve2(grid Grid) int {
-	return 0
+	basins := findBasins(grid)
+	sort.Slice(basins, func(i, j int) bool {
+		return len(basins[i]) > len(basins[j])
+	})
+
+	product := 0
+	for _, b := range basins[:3] {
+		if product == 0 {
+			product = len(b)
+			continue
+		}
+		product *= len(b)
+	}
+
+	return product
+}
+
+func findBasins(grid Grid) [][]Point {
+	basins := make([][]Point, 0)
+	for y := 0; y < len(grid); y++ {
+		for x := 0; x < len(grid[y]); x++ {
+			point := Point{x, y}
+			value, _ := grid.At(point)
+			if value == 9 {
+				continue
+			}
+
+			isLowPoint := true
+			for _, v := range grid.Surrounding(point) {
+				if v <= value {
+					isLowPoint = false
+					break
+				}
+			}
+			if !isLowPoint {
+				continue
+			}
+
+			basins = append(basins, basinFor(grid, point))
+		}
+	}
+
+	return basins
+}
+
+func basinFor(grid Grid, point Point) []Point {
+	lookup := map[Point]struct{}{}
+	points := []Point{}
+	addPoint := func(p Point) {
+		if _, exists := lookup[p]; exists {
+			return
+		}
+		lookup[p] = struct{}{}
+		points = append(points, p)
+	}
+
+	addPoint(point)
+	for i := 0; i < len(points); i++ {
+		pt := points[i]
+		for p, v := range grid.Surrounding(pt) {
+			if v < 9 && (p.X == pt.X || p.Y == pt.Y) {
+				addPoint(p)
+			}
+		}
+	}
+	return points
+}
+
+func highlightBasin(grid Grid, basin []Point) string {
+	inBasin := make(map[Point]struct{})
+	for _, p := range basin {
+		inBasin[p] = struct{}{}
+	}
+
+	sb := strings.Builder{}
+	for y := 0; y < len(grid); y++ {
+		if y > 0 {
+			sb.WriteString("\n")
+		}
+
+		for x := 0; x < len(grid[y]); x++ {
+			p := Point{x, y}
+			val, _ := grid.At(p)
+			if _, exists := inBasin[p]; exists {
+				sb.WriteString(stringutil.Colored(strconv.Itoa(val), stringutil.ColourRed))
+			} else {
+				sb.WriteString(strconv.Itoa(val))
+			}
+		}
+	}
+
+	return sb.String()
 }
